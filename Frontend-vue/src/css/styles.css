@@ -1,0 +1,341 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.nav-menu {
+    margin: 20px 0;
+    text-align: center;
+}
+
+.nav-link {
+    display: inline-block;
+    margin: 0 15px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.nav-link:hover {
+    background-color: #0056b3;
+}
+
+.nav-link.active {
+    background-color: #28a745;
+}
+
+.nav-link.active:hover {
+    background-color: #218838;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: black;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #f8f9fa;
+}
+
+.table tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+/* POS Terminal Styles */
+.pos-terminal {
+    min-height: 600px;
+}
+
+.pos-layout {
+    display: grid;
+    grid-template-columns: 1fr 400px;
+    gap: 20px;
+    height: 100%;
+}
+
+.product-selection {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.product-card {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.product-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.product-card h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+}
+
+.product-card .price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #007bff;
+    margin: 10px 0;
+}
+
+.product-card .stock {
+    font-size: 14px;
+    color: #666;
+}
+
+.cart-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    height: fit-content;
+}
+
+.cart-items {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.item-info h4 {
+    margin: 0 0 5px 0;
+    color: #333;
+}
+
+.item-info p {
+    margin: 0;
+    color: #666;
+}
+
+.item-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-small {
+    padding: 4px 8px;
+    font-size: 12px;
+    min-width: 24px;
+}
+
+.cart-summary {
+    background: white;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.summary-row.total {
+    font-weight: bold;
+    font-size: 18px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    color: #007bff;
+}
+
+.checkout-section {
+    text-align: center;
+}
+
+.user-section {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.user-section label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.user-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.customer-info {
+    margin-bottom: 20px;
+}
+
+.customer-info input {
+    margin-bottom: 10px;
+}
+
+.customer-input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.checkout-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Responsive POS Layout */
+@media (max-width: 1024px) {
+    .pos-layout {
+        grid-template-columns: 1fr;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+    
+    .table {
+        font-size: 14px;
+    }
+    
+    .btn {
+        padding: 8px 16px;
+        margin-bottom: 5px;
+    }
+    
+    .product-grid {
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    }
+    
+    .cart-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+    
+    .item-controls {
+        align-self: flex-end;
+    }
+}
