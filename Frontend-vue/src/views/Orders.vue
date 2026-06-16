@@ -1,26 +1,30 @@
 <template>
   <div class="orders">
-    <h2>Orders History</h2>
+    <h2>ประวัติการสั่งซื้อ</h2>
     <table class="table">
       <thead>
         <tr>
-          <th>Order ID</th>
-          <th>Customer</th>
-          <th>Date</th>
-          <th>Total</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>รหัสสั่งซื้อ</th>
+          <th>ผู้ขาย</th>
+          <th>วันที่</th>
+          <th>รวม</th>
+          <th>สถานะ</th>
+          <th>การจัดการ</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="order in orders" :key="order.id">
-          <td>{{ order.id }}</td>
-          <td>{{ order.customerName }}</td>
-          <td>{{ new Date(order.orderDate).toLocaleDateString() }}</td>
-          <td>${{ order.totalAmount.toFixed(2) }}</td>
-          <td>{{ order.status }}</td>
+        <tr v-for="order in orders" :key="order.orderId">
+          <td>{{ order.orderId }}</td>
+          <td>{{ order.user ? `${order.user.firstName} ${order.user.lastName}` : 'N/A' }}</td>
+          <td>{{ new Date(order.orderDate).toLocaleString() }}</td>
+          <td>{{ (order.totalAmount || 0).toFixed(2) }}</td>
           <td>
-            <button @click="viewOrder(order)" class="btn btn-info btn-small">View</button>
+            <span :class="['status-badge', order.status.toLowerCase()]">
+              {{ order.status }}
+            </span>
+          </td>
+          <td>
+            <button @click="viewOrder(order)" class="btn btn-info btn-small">ดูรายละเอียด</button>
           </td>
         </tr>
       </tbody>
@@ -42,7 +46,7 @@ export default {
   methods: {
     async loadOrders() {
       try {
-        const response = await fetch('http://localhost:5000/api/orders');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders`);
         if (response.ok) {
           this.orders = await response.json();
         }
@@ -106,6 +110,29 @@ export default {
 
 .btn-small:hover {
   opacity: 0.8;
+}
+
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.status-badge.completed {
+  background-color: #dcfce7;
+  color: #166534;
+}
+
+.status-badge.pending {
+  background-color: #fef9c3;
+  color: #854d0e;
+}
+
+.status-badge.cancelled {
+  background-color: #fee2e2;
+  color: #991b1b;
 }
 
 @media (max-width: 768px) {

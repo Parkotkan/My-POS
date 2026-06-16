@@ -19,7 +19,6 @@ namespace Backend_API.Models
         public decimal UnitPrice { get; set; }
 
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, 10000.00)]
         public decimal TotalPrice { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -28,6 +27,6 @@ namespace Backend_API.Models
 
         // Navigation property
         [ForeignKey("ProductId")]
-        public Product Product { get; set; }
+        public Product? Product { get; set; }
     }
 }

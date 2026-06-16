@@ -21,6 +21,7 @@ namespace Backend_API.Controllers.Api
         public async Task<ActionResult<IEnumerable<Order>>> GetOrders()
         {
             return await _context.Orders
+                .Include(o => o.User)
                 .Include(o => o.Order_items)
                 .ThenInclude(oi => oi.Product)
                 .OrderByDescending(o => o.OrderDate)
@@ -49,31 +50,63 @@ namespace Backend_API.Controllers.Api
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder([FromBody] Order order)
         {
-            if (order == null)
+            try
             {
-                return BadRequest();
-            }
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState);
+                }
 
-            // Validate that UserId is provided
-            if (order.UserId == 0)
+                if (order == null)
+                {
+                    return BadRequest("Order data is required");
+                }
+
+                if (order.UserId == 0)
+                {
+                    return BadRequest("UserId is required");
+                }
+
+                if (order.Order_items == null || !order.Order_items.Any())
+                {
+                    return BadRequest("Order must contain at least one item");
+                }
+
+                // Prepare order data
+                order.OrderDate = DateTime.Now;
+                order.CreatedDate = DateTime.Now;
+                order.Status = "Completed";
+
+                decimal calculatedTotal = 0;
+                foreach (var item in order.Order_items)
+                {
+                    item.CreatedDate = DateTime.Now;
+                    item.TotalPrice = item.Quantity * item.UnitPrice;
+                    calculatedTotal += item.TotalPrice;
+                }
+
+                // Use the calculated total if it differs or is zero
+                if (order.TotalAmount == 0)
+                {
+                    order.TotalAmount = calculatedTotal;
+                }
+
+                _context.Orders.Add(order);
+                await _context.SaveChangesAsync();
+
+                // Load the created order with all relations for the response
+                var result = await _context.Orders
+                    .Include(o => o.Order_items)
+                        .ThenInclude(oi => oi.Product)
+                    .Include(o => o.User)
+                    .FirstOrDefaultAsync(o => o.OrderId == order.OrderId);
+
+                return CreatedAtAction(nameof(GetOrder), new { id = order.OrderId }, result);
+            }
+            catch (Exception ex)
             {
-                return BadRequest("UserId is required");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
-
-            order.OrderDate = DateTime.Now;
-            order.Status = "Completed";
-
-            _context.Orders.Add(order);
-            await _context.SaveChangesAsync();
-
-            // Load the created order with items and user info
-            var createdOrder = await _context.Orders
-                .Include(o => o.Order_items)
-                .ThenInclude(oi => oi.Product)
-                .Include(o => o.User)
-                .FirstOrDefaultAsync(o => o.OrderId == order.OrderId);
-
-            return CreatedAtAction(nameof(GetOrder), new { id = createdOrder.OrderId }, createdOrder);
         }
 
         // PUT: api/orders/5

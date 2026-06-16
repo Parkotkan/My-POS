@@ -15,7 +15,6 @@ namespace Backend_API.Models
         public string Status { get; set; } = string.Empty;
         
         [Column(TypeName = "decimal(18,2)")]
-        [Range(0.01, 10000.00)]
         public decimal TotalAmount { get; set; }
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
@@ -26,6 +25,6 @@ namespace Backend_API.Models
         [ForeignKey("UserId")]
         public User? User { get; set; }
 
-        public ICollection<Order_item>? Order_items { get; set; }
+        public ICollection<Order_item> Order_items { get; set; } = new List<Order_item>();
     }
 }

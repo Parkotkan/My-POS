@@ -1,35 +1,59 @@
 <template>
-  <div class="products-management">
-    <h2>Products Management</h2>
-    <div class="action-buttons">
-      <button @click="showAddForm = true" class="btn btn-primary">Add Product</button>
+  <div class="container">
+    <div class="management-header">
+      <div class="title-section">
+        <h2>จัดการสินค้า</h2>
+        <p class="text-muted">จัดการข้อมูลสินค้า ราคา และหมวดหมู่</p>
+      </div>
+      <div class="action-section">
+        <div class="search-box">
+          <input type="text" v-model="searchQuery" placeholder="ค้นหาสินค้า...">
+        </div>
+        <button @click="showAddForm = true" class="btn btn-primary">
+          <span class="plus-icon">+</span> เพิ่มสินค้า
+        </button>
+      </div>
     </div>
 
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Product Code</th>
-          <th>Name</th>
-          <th>Description</th>
-          <th>Price</th>
-          <th>Category</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="product in products" :key="product.productId">
-          <td>{{ product.productId}}</td>
-          <td>{{ product.productName}}</td>
-          <td>{{ product.description || 'N/A' }}</td>
-          <td>${{ (product.price || 0).toFixed(2) }}</td>
-          <td>{{ product.category}}</td>
-          <td style="text-align: center;">
-            <button @click="editProduct(product)" class="btn btn-warning btn-small">Edit</button>
-            <button @click="deleteProduct(product.productId)" class="btn btn-danger btn-small">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="table-container">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>รหัสสินค้า</th>
+            <th>ชื่อสินค้า</th>
+            <th>หมวดหมู่</th>
+            <th>ราคา</th>
+            <th class="text-center">การจัดการ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="product in filteredProducts" :key="product.productId">
+            <td class="text-muted">{{ product.productId }}</td>
+            <td>
+              <div class="product-cell">
+                <span class="product-name">{{ product.productName }}</span>
+                <span class="product-desc">{{ product.description || 'ไม่มีคำอธิบาย' }}</span>
+              </div>
+            </td>
+            <td>
+              <span class="category-tag">{{ product.category }}</span>
+            </td>
+            <td class="font-bold">{{ (product.price || 0).toFixed(2) }}</td>
+            <td>
+              <div class="action-buttons">
+                <button @click="editProduct(product)" class="btn-icon edit" title="แก้ไข">✏️</button>
+                <button @click="deleteProduct(product.productId)" class="btn-icon delete" title="ลบ">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr v-if="filteredProducts.length === 0">
+            <td colspan="5" class="empty-state">
+              ไม่พบข้อมูลสินค้าที่ค้นหา
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -39,8 +63,19 @@ export default {
   data() {
     return {
       products: [],
+      searchQuery: '',
       showAddForm: false
     };
+  },
+  computed: {
+    filteredProducts() {
+      const query = this.searchQuery.toLowerCase();
+      return this.products.filter(p => 
+        (p.productName || '').toLowerCase().includes(query) || 
+        (p.category || '').toLowerCase().includes(query) ||
+        (p.description && p.description.toLowerCase().includes(query))
+      );
+    }
   },
   mounted() {
     this.loadProducts();
@@ -48,7 +83,7 @@ export default {
   methods: {
     async loadProducts() {
       try {
-        const response = await fetch('http://localhost:5000/api/products');
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products`);
         if (response.ok) {
           this.products = await response.json();
         }
@@ -57,13 +92,12 @@ export default {
       }
     },
     editProduct(product) {
-      // TODO: Implement edit functionality
       console.log('Edit product:', product);
     },
     async deleteProduct(id) {
-      if (confirm('Are you sure you want to delete this product?')) {
+      if (confirm('คุณแน่ใจหรือไม่ว่าต้องการลบสินค้านี้?')) {
         try {
-          const response = await fetch(`http://localhost:5000/api/products/${id}`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/products/${id}`, {
             method: 'DELETE'
           });
           if (response.ok) {
@@ -79,80 +113,116 @@ export default {
 </script>
 
 <style scoped>
-.products-management {
-  padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
+.management-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2rem;
+}
+
+.action-section {
+  display: flex;
+  gap: 5rem;
+  align-items: center;
+}
+
+.search-box input {
+  min-width: 250px;
+  padding: 0.625rem 1rem;
+}
+
+.plus-icon {
+  margin-right: 8px;
+  font-size: 1.2rem;
+}
+
+.product-cell {
+  display: flex;
+  flex-direction: column;
+}
+
+.product-name {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.product-desc {
+  font-size: 0.75rem;
+  color: #94a3b8;
+}
+
+.category-tag {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.font-bold {
+  font-weight: 700;
+  color: #3b82f6;
 }
 
 .action-buttons {
-  margin-bottom: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.table th {
-  padding: 12px 15px;
-  text-align: center;
-  border-bottom: 1px solid #eee;
-  background-color: #f8f9fa;
-  font-weight: 600;
-  color: #495057;
-}
-
-.table td {
-  padding: 12px 15px;
-  text-align: left;
-  border-bottom: 1px solid #eee;
-}
-
-.table tbody tr:hover {
-  background-color: #f8f9fa;
-}
-
-.btn-small {
-  padding: 6px 12px;
-  font-size: 12px;
-  border: none;
-  border-radius: 4px;
+.btn-icon {
+  background: none;
+  border: 1px solid #e2e8f0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
   cursor: pointer;
-  margin-right: 5px;
+  transition: all 0.2s;
 }
 
-.btn-small:hover {
-  opacity: 0.8;
+.btn-icon:hover {
+  background-color: #f8fafc;
+  transform: scale(1.1);
 }
 
-.btn-primary {
-  background-color: #007bff;
-  color: white;
+.btn-icon.delete:hover {
+  border-color: #ef4444;
+  color: #ef4444;
 }
 
-.btn-warning {
-  background-color: #ffc107;
-  color: #212529;
+.btn-icon.edit:hover {
+  border-color: #3b82f6;
+  color: #3b82f6;
 }
 
-.btn-danger {
-  background-color: #dc3545;
-  color: white;
+.empty-state {
+  text-align: center;
+  padding: 3rem !important;
+  color: #94a3b8;
+}
+
+.text-center {
+  text-align: center !important;
 }
 
 @media (max-width: 768px) {
-  .table {
-    font-size: 14px;
+  .management-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
-
-  .table th,
-  .table td {
-    padding: 8px 10px;
+  
+  .action-section {
+    width: 100%;
+    flex-direction: column;
+  }
+  
+  .search-box, .search-box input {
+    width: 100%;
   }
 }
 </style>

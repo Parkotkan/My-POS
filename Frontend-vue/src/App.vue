@@ -1,12 +1,17 @@
 <template>
-  <div class="container">
+  <div class="app-wrapper">
     <header class="header">
-      <h1>POS System</h1>
+      <div class="brand">
+        <h1>MyPOS</h1>
+      </div>
       <nav class="nav-menu">
-        <router-link to="/pos" class="nav-link">POS Terminal</router-link>
-        <router-link to="/products" class="nav-link">Products</router-link>
-        <router-link to="/orders" class="nav-link">Orders</router-link>
+        <router-link to="/pos" class="nav-link">สั่งซื้อสินค้า</router-link>
+        <router-link to="/products" class="nav-link">จัดการสินค้า</router-link>
+        <router-link to="/orders" class="nav-link">ประวัติการขาย</router-link>
       </nav>
+      <div class="user-info">
+        <!-- Optional: Add user profile / logout here -->
+      </div>
     </header>
 
     <main>
@@ -20,3 +25,7 @@ export default {
   name: 'App'
 };
 </script>
+
+<style>
+/* Global styles can also be here or in styles.css */
+</style>
