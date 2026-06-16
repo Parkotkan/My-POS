@@ -1,308 +1,179 @@
-# My_POS - Point of Sale System
+# My_POS - ระบบบริหารจัดการ การขาย (Point of Sale)
 
-A modern Point of Sale (POS) system built with a separated Frontend (Vue 3) and Backend (ASP.NET Core 8.0) architecture.
+ระบบ POS ที่พัฒนาด้วย Frontend (Vue 3) และ Backend (ASP.NET Core 8.0)
 
-## 🏗️ Project Structure
+## โครงสร้าง
 
 ```
 My_POS/
-├── Backend_API/          # ASP.NET Core 8.0 API Backend
-│   ├── Controllers/      # API Controllers
-│   ├── Data/             # Database Context
-│   ├── Models/           # Data Models
-│   ├── Migrations/       # EF Core Migrations
-│   └── README.md         # Backend documentation
+├── Backend_API/          # ส่วนหลังบ้าน (ASP.NET Core 8.0 API)
+│   ├── Controllers/      # ตัวจัดการ API
+│   ├── Data/             # ส่วนเชื่อมต่อฐานข้อมูล (DbContext)
+│   ├── Models/           # โมเดลข้อมูล
+│   ├── Migrations/       # การตั้งค่าฐานข้อมูล (EF Core)
+│   └── README.md         # เอกสารส่วน Backend
 │
-├── Frontend-vue/         # Vue 3 + Vite Frontend
+├── Frontend-vue/         # ส่วนหน้าบ้าน (Vue 3 + Vite)
 │   ├── src/
-│   │   ├── js/           # Vue components & app logic
-│   │   └── css/          # Stylesheets
-│   ├── public/           # Static files
-│   ├── package.json      # Node dependencies
-│   ├── vite.config.js    # Vite configuration
-│   └── README.md         # Frontend documentation
+│   │   ├── components/   # คอมโพเนนต์ที่ใช้ซ้ำ (เช่น Modern Modal)
+│   │   ├── views/        # หน้าจอหลักของระบบ
+│   │   └── css/          # ไฟล์สไตล์ (CSS)
+│   ├── public/           # ไฟล์คงที่ (Static files)
+│   ├── package.json      # การตั้งค่า dependencies
+│   ├── vite.config.js    # การตั้งค่า Vite
+│   └── README.md         # เอกสารส่วน Frontend
 │
-└── My_POS.sln            # Visual Studio Solution
+└── My_POS.sln            # ไฟล์ Solution สำหรับ Visual Studio
 ```
 
-## 🎯 Architecture
+## สถาปัตยกรรม (Architecture)
 
-This project uses a **fully separated client-server architecture**:
+โปรเจกต์นี้ใช้สถาปัตยกรรมแบบแยก Client และ Server ออกจากกันอย่างอิสระ:
 
-### Backend
-- **Technology**: ASP.NET Core 8.0
-- **Port**: 5000 (HTTP), 5001 (HTTPS)
-- **Database**: SQL Server
-- **Role**: RESTful API serving business logic and data
+### Backend (หลังบ้าน)
+- **เทคโนโลยี**: ASP.NET Core 8.0
+- **พอร์ต (Port)**: 5000 (HTTP), 5001 (HTTPS)
+- **ฐานข้อมูล**: SQL Server
+- **หน้าที่**: RESTful API
 
-### Frontend
-- **Technology**: Vue 3 with Vite
-- **Port**: 3000
-- **Role**: Interactive user interface
+### Frontend (หน้าบ้าน)
+- **เทคโนโลยี**: Vue 3 พร้อม Vite
+- **พอร์ต (Port)**: 3000
+- **หน้าที่**: ส่วนติดต่อผู้ใช้
 
-### Communication
-- Frontend makes API calls to backend via HTTP/CORS
-- No server-side rendering or static file serving from backend
-- Fully independent development and deployment
+### การสื่อสาร
+- Frontend เรียกใช้ API ผ่าน HTTP/CORS
+- ใช้ตัวแปรสภาพแวดล้อม (.env) ในการตั้งค่า URL ของ API
+- การพัฒนาและการปรับใช้งาน (Deployment) แยกจากกัน
 
-## 🚀 Quick Start
+## เริ่มต้นใช้งาน
 
-### Backend Setup
+### การตั้งค่า Backend
 
 ```bash
 cd Backend_API
 
-# Restore dependencies
+# ติดตั้ง dependencies
 dotnet restore
 
-# Apply database migrations
+# อัปเดตฐานข้อมูล
 dotnet ef database update
 
-# Run the backend
+# รันระบบหลังบ้าน
 dotnet run
 ```
 
-Backend will be available at: `http://localhost:5000/api`
+Backend จะพร้อมใช้งานที่: `http://localhost:5000/api`
 
-### Frontend Setup
+### การตั้งค่า Frontend
 
 ```bash
 cd Frontend-vue
 
-# Install dependencies
+# ติดตั้ง dependencies
 npm install
 
-# Start development server
+# รันระบบหน้าบ้านสำหรับพัฒนา
 npm run dev
 ```
 
-Frontend will be available at: `http://localhost:3000`
+Frontend จะพร้อมใช้งานที่: `http://localhost:3000`
 
-## 📦 Installation & Development
+## 📦 การติดตั้งและพัฒนา
 
-### Prerequisites
-- **.NET 8.0 SDK** - [Download](https://dotnet.microsoft.com/download)
-- **Node.js v16+** - [Download](https://nodejs.org/)
-- **SQL Server** - Local instance or configured connection string
+### สิ่งที่ต้องมี (Prerequisites)
+- **.NET 8.0 SDK** - [ดาวน์โหลด](https://dotnet.microsoft.com/download)
+- **Node.js v16+** - [ดาวน์โหลด](https://nodejs.org/)
+- **SQL Server** - Instance ท้องถิ่นหรือ Connection String ที่กำหนดค่าไว้
 
-### Step 1: Configure Backend
+### ขั้นตอนที่ 1: ตั้งค่า Backend
 
-1. Edit `Backend_API/appsettings.json`:
+1. แก้ไขไฟล์ `Backend_API/appsettings.json`:
 ```json
 {
   "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost;Database=POS_DB;Integrated Security=true;"
+    "DefaultConnection": "Server=localhost;Database=POS_DB;Integrated Security=true;TrustServerCertificate=true;"
   }
 }
 ```
 
-2. Run migrations:
+2. รัน Migrations:
 ```bash
 cd Backend_API
 dotnet ef database update
 ```
 
-3. Start backend:
-```bash
-dotnet run
-```
+### ขั้นตอนที่ 2: ตั้งค่า Frontend
 
-### Step 2: Setup Frontend
-
-1. Install dependencies:
+1. ติดตั้ง dependencies:
 ```bash
 cd Frontend-vue
 npm install
 ```
 
-2. Create `.env` file:
+2. สร้างไฟล์ `.env`:
 ```bash
+# คัดลอกฐานจากไฟล์ตัวอย่าง
 cp .env.example .env
 ```
 
-3. Start frontend:
-```bash
-npm run dev
-```
+## 📚 คุณสมบัติเด่น (Features)
 
-## 📚 Features
+### หน้าจอขายสินค้า (POS Terminal)
+- 🛒 ค้นหาสินค้าและเพิ่มลงตะกร้าอย่างรวดเร็ว
+- 📊 คำนวณราคารวมแบบเรียลไทม์
+- 👥 เลือกแคชเชียร์ผู้ทำรายการ
+- ✨ **ใหม่!** ระบบแจ้งเตือน (Alert) แบบ Modern Modal สวยงาม
+- ✅ ระบบชำระเงินและตรวจสอบความถูกต้องของข้อมูล
 
-### POS Terminal
-- 🛒 Product search and quick add to cart
-- 📊 Real-time cart totals with tax calculation
-- 👥 Cashier selection
-- 💳 Customer information capture
-- ✅ Order completion and checkout
+### การจัดการสินค้า (Product Management)
+- ดูรายการสินค้าทั้งหมด
+- จัดการสต็อกและราคาสินค้า
+- แยกหมวดหมู่สินค้า
 
-### Product Management
-- View all available products
-- Manage product inventory
-- Product pricing
+### การจัดการคำสั่งซื้อ (Order Management)
+- บันทึกประวัติการขาย
+- **ใหม่!** แสดงรหัสสั่งซื้อและ **ชื่อผู้ขาย (Seller Name)** ในตารางสรุป
+- ดูรายละเอียดรายการสินค้าในแต่ละคำสั่งซื้อ
 
-### Order Management
-- Create and record sales orders
-- View order history
-- Order details and line items
+### การจัดการผู้ใช้ (User Management)
+- จัดการบัญชีพนักงาน/แคชเชียร์
+- ติดตามผลงานการขายของพนักงานแต่ละคน
 
-### User Management
-- Manage cashier/staff accounts
-- Track who processed each order
+## 🔌 จุดเชื่อมต่อ API (API Endpoints)
 
-## 🔌 API Endpoints
+### สินค้า (Products)
+- `GET /api/products` - ดึงข้อมูลสินค้าทั้งหมด
+- `POST /api/products` - เพิ่มสินค้าใหม่
+- `DELETE /api/products/{id}` - ลบสินค้า
 
-### Products
-```
-GET    /api/products           - Get all products
-GET    /api/products/{id}      - Get product by ID
-POST   /api/products           - Create new product
-PUT    /api/products/{id}      - Update product
-DELETE /api/products/{id}      - Delete product
-```
+### คำสั่งซื้อ (Orders)
+- `GET /api/orders` - ดึงประวัติการสั่งซื้อ (รวมข้อมูลผู้ขาย)
+- `POST /api/orders` - สร้างคำสั่งซื้อใหม่ (พร้อมคำนวณราคารวมอัตโนมัติ)
 
-### Orders
-```
-GET    /api/orders             - Get all orders
-GET    /api/orders/{id}        - Get order by ID
-POST   /api/orders             - Create new order
-PUT    /api/orders/{id}        - Update order
-DELETE /api/orders/{id}        - Delete order
-```
+## 📊 รายละเอียดฐานข้อมูล (Schema)
 
-### Users
-```
-GET    /api/users              - Get all users
-GET    /api/users/{id}         - Get user by ID
-POST   /api/users              - Create new user
-PUT    /api/users/{id}         - Update user
-DELETE /api/users/{id}         - Delete user
-```
+- **Users**: ข้อมูลพนักงาน (Username, ชื่อ-นามสกุล, บทบาท)
+- **Products**: ข้อมูลสินค้า (ชื่อ, ราคา, หมวดหมู่, สถานะ)
+- **Orders**: ข้อมูลการขาย (วันที่, ราคารวม, ผู้ขาย)
+- **Order_Items**: รายละเอียดสินค้าในแต่ละบิล (สินค้า, จำนวน, ราคาต่อหน่วย)
 
-## 🛠️ Build & Deployment
-
-### Frontend Build
-```bash
-cd Frontend-vue
-npm run build
-```
-Output: `Frontend-vue/dist/` - Ready for deployment to any static hosting
-
-### Backend Build
-```bash
-cd Backend_API
-dotnet publish -c Release
-```
-Output: `Backend_API/bin/Release/net8.0/publish/` - Ready for deployment
-
-## 🔐 CORS Configuration
-
-The backend is configured to accept requests from:
-- `http://localhost:3000` (Development frontend)
-- `http://localhost:8080` (Alternative)
-- `http://localhost:5000` (Same origin)
-
-Modify `Backend_API/Program.cs` to add production domains.
-
-## 📊 Database Schema
-
-### Users Table
-- Id (PK)
-- FirstName
-- LastName
-- Email
-- CreatedAt
-
-### Products Table
-- Id (PK)
-- Name
-- Description
-- Price
-- Stock
-- CreatedAt
-
-### Orders Table
-- Id (PK)
-- OrderDate
-- Total
-- CustomerId
-- UserId (FK → Users)
-
-### Order_Items Table
-- Id (PK)
-- OrderId (FK → Orders)
-- ProductId (FK → Products)
-- Quantity
-- Price
-
-## ⚙️ Environment Variables
+## ⚙️ ตัวแปรสภาพแวดล้อม (Environment Variables)
 
 ### Frontend (`.env`)
 ```
 VITE_API_URL=http://localhost:5000
 ```
 
-### Backend (`appsettings.json`)
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Your_Connection_String"
-  }
-}
-```
+## 📝 บันทึกการอัปเดตล่าสุด (Recent Updates)
 
-## 📝 Migration Guide
-
-The original monolithic structure has been refactored:
-
-**Before:**
-- Frontend files were in `Backend_API/wwwroot/`
-- Backend served static files
-- Tightly coupled architecture
-
-**After:**
-- Frontend is now in `Frontend-vue/` directory
-- Backend removed static file serving
-- Fully decoupled architecture
-- Easier to scale and deploy independently
-
-## 🐛 Troubleshooting
-
-### Frontend can't connect to backend
-- Verify backend is running on port 5000
-- Check CORS configuration in `Backend_API/Program.cs`
-- Ensure `VITE_API_URL` in `.env` is correct
-
-### Database connection fails
-- Verify SQL Server is running
-- Check connection string in `appsettings.json`
-- Ensure database exists
-
-### Port conflicts
-- Backend port: Change in `Program.cs`
-- Frontend port: Change in `vite.config.js`
-
-## 📦 Technologies Used
-
-### Backend
-- ASP.NET Core 8.0
-- Entity Framework Core
-- SQL Server
-- RESTful API
-
-### Frontend
-- Vue 3
-- Vue Router 4
-- Vite
-- Modern JavaScript (ES6+)
-
-## 📄 License
-
-This project is proprietary software.
-
-## 👥 Support
-
-For issues or questions, please contact the development team.
+1.  **Backend Validation**: ปรับปรุงการตรวจสอบข้อมูลฝั่ง Server ให้ยืดหยุ่นขึ้น (รองรับการคำนวณราคาก่อนบันทึก)
+2.  **Modern UI**: เพิ่มคอมโพเนนต์ `BaseModal` เพื่อใช้แทนการแจ้งเตือนแบบ Alert เดิมของบราวเซอร์
+3.  **Enhanced Orders**: หน้าประวัติการสั่งซื้อแสดงรหัสและชื่อพนักงานผู้ขายอย่างชัดเจน
+4.  **Centralized Config**: ปรับปรุงให้ทุกหน้าเรียกใช้ API URL จากไฟล์ `.env` เพียงที่เดียว
 
 ---
 
-**Last Updated**: April 2026  
-**Status**: ✅ Separated Architecture Complete
+**อัปเดตล่าสุด**: มิถุนายน 2026  
+**สถานะโปรเจกต์**: ยังไม่เสร็จสมบูรณ์ ต้องการเพิ่ม การ login , กำหนดสิทธิ์การเข้าถึงสำหรับตำแหน่งต่างๆ , การเพิ่ม ลบ แก้ไขสินค้า , การแสดงรายละเอียดคำสั่งซื้อ
+
